@@ -3,6 +3,7 @@ package nuaa.freedomtot;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -28,24 +29,28 @@ public class Recommend {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 		Recommend r=new Recommend();
-		
-		
-		
+		RecommendStrFactory rsf=new RecommendStrFactory();
+		List<StrAndType> recList=rsf.getRecommendStrs();
+		for (StrAndType strAndType : recList) {
+			r.getNewUrl(strAndType);
+			//r.recommendNewOne(r.getNewUrl(strAndType));
+		}
 		//r.recommendNewOne(r.getNewUrl());
 	//	System.out.println(r.getNewUrl());
 
 	}
 	
-	private String getNewUrl() throws UnsupportedEncodingException {
+	private String getNewUrl(StrAndType strAndType) throws UnsupportedEncodingException {
 		StringBuffer strbuf = new StringBuffer(DEFAULT_URL);
-		String name=java.net.URLEncoder.encode("冯思喆", "UTF-8");
-		int type=1;
-		String content=java.net.URLEncoder.encode("冯思喆，江苏连云港海州区龙河小区人，助。在社区看见有不良现象总会主动上前纠正，协调社区工作，主动关爱老人，献爱心、做力所能及的事。", "UTF-8");
+		String name=java.net.URLEncoder.encode(strAndType.name, "UTF-8");
+		int type=strAndType.type;
+		String content=java.net.URLEncoder.encode(strAndType.str, "UTF-8");
 		Date now = new Date();
 		strbuf.append("&categoryType="+type);
 		strbuf.append("&recName="+name);
 		strbuf.append("&content="+content);
 		strbuf.append("&timestamp="+now.getTime());
+		System.out.println(strbuf);
 		return strbuf.toString();
 	}
 

@@ -26,27 +26,30 @@ public class RecommendStrFactory {
 			forAdults.put(i, new LinkedList<String>());
 		}
 	}
-	public static void main(String[] args) throws FileNotFoundException {
-		// TODO Auto-generated method stub
+	
+	public List<StrAndType> getRecommendStrs() throws FileNotFoundException{
 		Map<String,Integer> map=ReadFromExcel.readExcel("data.xls");
-		RecommendStrFactory rsf= new RecommendStrFactory();
-		rsf.readData();
+		readData();
+		List<StrAndType> list= new LinkedList<>();
 		String ans;
 		for (String name : map.keySet()) {
 			if(map.get(name)>=1995) {
-				ans=name+rsf.getKidRecStr(name);
+				list.add(getKidRecStr(name));
 			}
 			else {
-				ans=name+rsf.getAdultRecStr(name);
+				list.add(getAdultRecStr(name));
 			}
-			System.out.println(ans);
 		}
+		return list;
+	}
+	public static void main(String[] args) throws FileNotFoundException {
+	
 		
 	}
 	
 	
 	
-	private  String getAdultRecStr(String name) {
+	private  StrAndType getAdultRecStr(String name) {
 		// TODO Auto-generated method stub
 		int type=name.hashCode()%5+1;
 		List<String> list=null;
@@ -58,9 +61,10 @@ public class RecommendStrFactory {
 		}
 		
 		int index=name.hashCode()%list.size();
-		return list.get(index);
+		StrAndType x=new StrAndType(name, name+list.get(index), type);
+		return x;
 	}
-	private  String getKidRecStr(String name) {
+	private  StrAndType getKidRecStr(String name) {
 		// TODO Auto-generated method stub
 		int type=name.hashCode()%5+1;
 		List<String> list=null;
@@ -70,9 +74,9 @@ public class RecommendStrFactory {
 			type=type%5+1;
 			list=forKids.get(type);
 		}
-		
 		int index=name.hashCode()%list.size();
-		return list.get(index);
+		StrAndType x=new StrAndType(name, name+list.get(index), type);
+		return x;
 	}
 	private void readData() throws FileNotFoundException {
 		init();
